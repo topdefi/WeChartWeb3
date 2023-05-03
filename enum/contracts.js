@@ -2,9 +2,9 @@ const UtilsAddresses = require("../utils/addresses");
 const EnumChainId = require("./chain.id");
 
 const EnumContracts = {
-    [EnumChainId.BSC]: {
-        MAIN_ROUTER: UtilsAddresses.toCheckSum("0x10ED43C718714eb63d5aA57B78B54704E256024E"), // Pancake
-        MAIN_FACTORY: UtilsAddresses.toCheckSum("0xca143ce32fe78f1f7019d7d551a6402fc5350c73") // Pancake
+    [EnumChainId.ARC]: {
+        MAIN_ROUTER: UtilsAddresses.toCheckSum("0x052967739A95D258c44Cf9a79F3135c1291d9fe5"), // ArchieSwap
+        MAIN_FACTORY: UtilsAddresses.toCheckSum("0x265beF08d618051A923502C106aE9002159d9bdF") // ArchieSwap
     }
 };
 
