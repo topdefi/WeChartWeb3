@@ -10,8 +10,8 @@ let scraperConfig = {
             toCheckSum("0xc748673057861a797275CD8A068AbB95A902e8de") // example whitelisted token
         ], 
         "use_checkpoint_when_restart": false, // if the scraper crashes, it has to scrape all the block since the latest one scraped?
-        "http_provider": "<your_http_provider>", // to fill
-        "ws_provider": "<your_ws_provider>", // to fill
+        "http_provider": "http://127.0.0.1:8545", // to fill
+        "ws_provider": "ws://127.0.0.1:8545/ws", // to fill
     }
 }
 module.exports = scraperConfig;
