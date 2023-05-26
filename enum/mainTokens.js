@@ -7,14 +7,14 @@ const EnumMainTokens = {
             address: UtilsAddresses.toCheckSum("0x9000688B5C45b9a37e89C33D9033C9073d1913f7"),
             decimals: 18
         },
-        USDC: {
+        USDT: {
             address: UtilsAddresses.toCheckSum("0x9476e33eF6ecD588d29caf782d37620ccb2b9310"),
             decimals: 18
         }
     }
 }
 
-EnumMainTokens[EnumChainId.ARC].STABLECOINS = [ "USDC" ].map( e => EnumMainTokens[EnumChainId.ARC][e].address );
+EnumMainTokens[EnumChainId.ARC].STABLECOINS = [ "USDT" ].map( e => EnumMainTokens[EnumChainId.ARC][e].address );
 EnumMainTokens[EnumChainId.ARC].MAIN = EnumMainTokens[EnumChainId.ARC]["WARC"];
 
 // [0x10ED43C718714eb63d5aA57B78B54704E256024E, 0x10ED43C718714eb63d5aA57B78B54704E256024E,0x10ED43C718714eb63d5aA57B78B54704E256024E,0x10ED43C718714eb63d5aA57B78B54704E256024E,0x0000000000000000000000000000000000000000]
