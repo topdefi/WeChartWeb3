@@ -10,7 +10,17 @@ function toSum(add){
 
 async function getSyncInBlockForPairs( pairs, blockNum, from ){
     let blockHeader = await web3.eth.getBlock(blockNum);
-    let rpcResponsesReceipts = await getReceiptsBatch( blockHeader.transactions );
+    
+    const totalTransactions = blockHeader.transactions.length;
+    const totalBatches = Math.ceil(totalTransactions / 10);
+    const batches = Array.from(Array(totalBatches).keys());
+
+    let rpcResponsesReceipts = [];
+    for (const batch of batches) {
+        const _receipts = await getReceiptsBatch( blockHeader.transactions.slice(batch * 10, (batch + 1) * 10) );
+        rpcResponsesReceipts = rpcResponsesReceipts.concat(_receipts);
+    }
+
     for( let rpcRes of rpcResponsesReceipts ){
         let receipt = rpcRes.result;
         let hash = receipt.transactionHash;
