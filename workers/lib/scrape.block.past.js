@@ -81,7 +81,17 @@ async function getTransactionsBatch( hashes ){
 async function getBlockSyncEvents( blockNumber ){
     let blockInfos = await web3.eth.getBlock(blockNumber);
     pairs_informations[blockNumber] = {};
-    let rpcResponsesReceipts = await getReceiptsBatch( blockInfos.transactions );
+
+    const totalTransactions = blockInfos.transactions.length;
+    const totalBatches = Math.ceil(totalTransactions / 10);
+    const batches = Array.from(Array(totalBatches).keys());
+
+    let rpcResponsesReceipts = [];
+    for (const batch of batches) {
+        const _receipts = await getReceiptsBatch( blockInfos.transactions.slice(batch * 10, (batch + 1) * 10) );
+        rpcResponsesReceipts = rpcResponsesReceipts.concat(_receipts)
+    }
+
     for( let rpcRes of rpcResponsesReceipts ){
         let receipt = rpcRes.result;
         let hash = receipt.transactionHash;
@@ -92,7 +102,17 @@ async function getBlockSyncEvents( blockNumber ){
 async function getBlockReceipts( blockNumber ){
     let blockInfos = await web3.eth.getBlock(blockNumber);
     pairs_informations[blockNumber] = {};
-    let rpcResponsesReceipts = await getReceiptsBatch( blockInfos.transactions );
+
+    const totalTransactions = blockInfos.transactions.length;
+    const totalBatches = Math.ceil(totalTransactions / 10);
+    const batches = Array.from(Array(totalBatches).keys());
+
+    let rpcResponsesReceipts = [];
+    for (const batch of batches) {
+        const _receipts = await getReceiptsBatch( blockInfos.transactions.slice(batch * 10, (batch + 1) * 10) );
+        rpcResponsesReceipts = rpcResponsesReceipts.concat(_receipts);
+    }
+
     let receipts = [];
     for( let rpcRes of rpcResponsesReceipts ){
         let receipt = rpcRes.result;
@@ -103,7 +123,17 @@ async function getBlockReceipts( blockNumber ){
 async function getBlockTransactions( blockNumber ){
     let blockInfos = await web3.eth.getBlock(blockNumber);
     pairs_informations[blockNumber] = {};
-    let rpcResponsesTransactions = await getTransactionsBatch( blockInfos.transactions );
+
+    const totalTransactions = blockInfos.transactions.length;
+    const totalBatches = Math.ceil(totalTransactions / 10);
+    const batches = Array.from(Array(totalBatches).keys());
+
+    let rpcResponsesTransactions = [];
+    for (const batch of batches) {
+        const _transactions = await getTransactionsBatch( blockInfos.transactions.slice(batch * 10, (batch + 1) * 10) );
+        rpcResponsesTransactions = rpcResponsesTransactions.concat(_transactions);
+    }
+
     let transactions = [];
     for( let rpcRes of rpcResponsesTransactions ){
         let tx = rpcRes.result;

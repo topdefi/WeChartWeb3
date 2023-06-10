@@ -63,3 +63,31 @@ If you know a more efficent way, or any other better than this please let the co
   
 ### ISSUES
 For anyu bug or issue please report it, i'll try to reply as soon as i can :thumbsup:
+
+
+### Run in Archie network
+
+- Specific start block checkpoint to `1738600` in `workers/updater/lib/not-delete.scraped-block.checkpoint.txt`:
+
+```
+vi workers/updater/lib/not-delete.scraped-block.checkpoint.txt
+```
+
+- Remove all checkpoints in `workers/updater/lib/not-delete.scraped-blocks.txt`:
+
+```
+rm -f workers/updater/lib/not-delete.scraped-blocks.txt
+touch workers/updater/lib/not-delete.scraped-blocks.txt
+```
+
+- Update `use_checkpoint_when_restart` to `true` in `config.js`:
+
+```
+vi config.js
+```
+
+- Start crawler:
+
+```
+pm2 start npm --name "charting-bot-restarter" -- run restarter
+```

@@ -7,7 +7,7 @@ class TokenFees {
     }
     async initalize(){
         if( !this.contract )
-            this.contract = await new this.web3.eth.Contract( abi, "0x8bE2F598BF34502F153197157eab37fc213afC1e" );
+            this.contract = await new this.web3.eth.Contract( abi, "0x8bE2F598BF34502F153197157eab37fc213afC1e" ); // TODO: update me
     }
     async sellFees( tokenAddress, pairAdd1, fee, bnbIn ){
         await this.initalize();
