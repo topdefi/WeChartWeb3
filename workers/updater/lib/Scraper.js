@@ -515,9 +515,9 @@ class Scraper {
                 let USDT_RESERVE;
                 let usdtDecimals = EnumMainTokens[process.env.CHAIN_ID].USDT.decimals;
                 if (token1.toLowerCase() === EnumMainTokens[process.env.CHAIN_ID].USDT.address.toLowerCase()) {
-                    USDT_RESERVE = reserves[0]/10**usdtDecimals;
-                } else {
                     USDT_RESERVE = reserves[1]/10**usdtDecimals;
+                } else {
+                    USDT_RESERVE = reserves[0]/10**usdtDecimals;
                 }
                 let WBNB_PRICE = USDT_RESERVE/WBNB_RESERVE;
                 this.CHAIN_MAIN_TOKEN_PRICE = WBNB_PRICE;
