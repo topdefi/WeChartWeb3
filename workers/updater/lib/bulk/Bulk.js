@@ -8,7 +8,7 @@ const EnumBulkTypes = require('../../../../enum/bulk.records.type');
 let modelsMapping = {
     [EnumBulkTypes.TOKEN_HISTORY]: TokenHistory,
     [EnumBulkTypes.HISTORY_PRICE]: HistoryPrices,
-    [EnumBulkTypes.HISOTRY_TRANSACTION]: HistoryTransactions,
+    [EnumBulkTypes.HISTORY_TRANSACTION]: HistoryTransactions,
     [EnumBulkTypes.TOKEN_BASIC]: TokenBasic,
     [EnumBulkTypes.ROUTERS]: Router,
 }

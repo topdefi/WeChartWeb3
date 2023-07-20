@@ -61,7 +61,7 @@ class Token {
             let burnAddAmount = await tokenContract.methods.balanceOf("0x000000000000000000000000000000000000dEaD").call();
             return zeroAddAmount + burnAddAmount;
         } catch (error) {
-            console.log(`\t\t[ERR RETRIVING TOKEN BURNED] ${error} `);
+            console.log(`\t\t[ERR RETRIEVING TOKEN BURNED] ${error} `);
         }
         return 0;
     }

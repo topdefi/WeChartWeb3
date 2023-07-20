@@ -14,7 +14,7 @@ const EnumMainTokens = {
     }
 }
 
-EnumMainTokens[EnumChainId.ARC].STABLECOINS = [ "USDT" ].map( e => EnumMainTokens[EnumChainId.ARC][e].address );
+EnumMainTokens[EnumChainId.ARC].STABLE_COINS = [ "USDT" ].map( e => EnumMainTokens[EnumChainId.ARC][e].address );
 EnumMainTokens[EnumChainId.ARC].MAIN = EnumMainTokens[EnumChainId.ARC]["WARC"];
 
 // [0x10ED43C718714eb63d5aA57B78B54704E256024E, 0x10ED43C718714eb63d5aA57B78B54704E256024E,0x10ED43C718714eb63d5aA57B78B54704E256024E,0x10ED43C718714eb63d5aA57B78B54704E256024E,0x0000000000000000000000000000000000000000]

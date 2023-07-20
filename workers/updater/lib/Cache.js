@@ -48,7 +48,7 @@ class Cache {
     getSizeHistories(){
         return this.HISTORIES_CACHE_SIZE;
     }
-    getSizePirceHistory(){
+    getSizePriceHistory(){
         return this.PRICES_CACHE_SIZE;
     }
     setToken( tokenAddress, tokenInfos, overwrite ){
@@ -91,7 +91,7 @@ class Cache {
             this.CACHE.historyPrice[pair] = history;
             return;
         }
-        let cacheSize = this.getSizePirceHistory();
+        let cacheSize = this.getSizePriceHistory();
         if( cacheSize > this.TOKENS_CACHE_MAX_SIZE ){ // keeps the tokens cache with a fixed size
             let toRemove = this.PRICES_CACHE_ORDER.shift();
             delete this.CACHE.historyPrice[toRemove];

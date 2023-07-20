@@ -1,7 +1,7 @@
 
 
-const HistoryPirceModel = require('../../../../server/models/history_prices');
-class HistoryPirce {
+const HistoryPriceModel = require('../../../../server/models/history_prices');
+class HistoryPrice {
     constructor( cache ){
         this.cache = cache;
     }
@@ -16,7 +16,7 @@ class HistoryPirce {
         if(!history) history = {latest: null, day: null};
 
         if(!history.latest){
-            let latestPrice = await HistoryPirceModel
+            let latestPrice = await HistoryPriceModel
             .find( { pair: pair,  time: { $lte: now_unix } } )
             .sort({ time: -1})
             .limit(1)
@@ -27,7 +27,7 @@ class HistoryPirce {
         }
 
         if(!history.day){
-            let dayAgoPrice = await HistoryPirceModel
+            let dayAgoPrice = await HistoryPriceModel
             .find( { pair: pair,  time: { $lte: one_day_ago, $gt: two_days_ago } } )
             .sort({ time: -1 })
             .limit(1)
@@ -42,7 +42,7 @@ class HistoryPirce {
         return history;
     }
     async getLastHistoryTime( pair, time ){
-        let latestPrice = await HistoryPirceModel
+        let latestPrice = await HistoryPriceModel
         .findOne( { pair: pair,  time: { $lte: time } } )
         .lean()
         .select({ time: 1 })
@@ -51,4 +51,4 @@ class HistoryPirce {
     }
 
 }
-module.exports = HistoryPirce;
+module.exports = HistoryPrice;
