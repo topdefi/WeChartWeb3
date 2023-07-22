@@ -42,14 +42,14 @@ class TokenHistory {
                     {
                         'token0.contract': token,
                         'token1.contract': {$in: [
-                            ...EnumMainTokens[process.env.CHAIN_ID].STABLECOINS,
+                            ...EnumMainTokens[process.env.CHAIN_ID].STABLE_COINS,
                             EnumMainTokens[process.env.CHAIN_ID].MAIN.address
                         ]}
                     },
                     {
                         'token1.contract': token,
                         'token0.contract': {$in: [
-                            ...EnumMainTokens[process.env.CHAIN_ID].STABLECOINS,
+                            ...EnumMainTokens[process.env.CHAIN_ID].STABLE_COINS,
                             EnumMainTokens[process.env.CHAIN_ID].MAIN.address
                         ]}
                     }

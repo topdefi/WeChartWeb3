@@ -56,7 +56,7 @@ async function getPairs( contract ){
         let pairInfos = tokenPairs[i];
         
         if( pairInfos.mainToken === EnumMainTokens[pairInfos.chain].MAIN.address ) pairs[pairInfos.pair] = {};
-        else if( EnumMainTokens[pairInfos.chain].STABLECOINS.includes( pairInfos.mainToken ) ) pairs[pairInfos.pair] = {};
+        else if( EnumMainTokens[pairInfos.chain].STABLE_COINS.includes( pairInfos.mainToken ) ) pairs[pairInfos.pair] = {};
         
         if( i == tokenPairs.length - 1 && !Object.keys(pairs).length ){}
         else if( !pairs[pairInfos.pair] ) continue;
@@ -102,7 +102,7 @@ async function getPairsMultiple( contracts ){
             let pairInfos = pairsToCheck[i];
             
             if( pairInfos.mainToken === EnumMainTokens[pairInfos.chain].MAIN.address ) organizedPairs[token][pairInfos.pair] = {};
-            else if( EnumMainTokens[pairInfos.chain].STABLECOINS.includes( pairInfos.mainToken ) ) organizedPairs[token][pairInfos.pair] = {};
+            else if( EnumMainTokens[pairInfos.chain].STABLE_COINS.includes( pairInfos.mainToken ) ) organizedPairs[token][pairInfos.pair] = {};
     
             if( i == pairsToCheck.length - 1 && !Object.keys(organizedPairs[token]).length ){}
             else if( !organizedPairs[token][pairInfos.pair] ) continue;
@@ -167,7 +167,7 @@ async function getMainPair( contract ){
                 pairInfos = pairDetails;
             }
         }
-        else if( EnumMainTokens[pairDetails.chain].STABLECOINS.includes( pairDetails.mainToken ) ) {
+        else if( EnumMainTokens[pairDetails.chain].STABLE_COINS.includes( pairDetails.mainToken ) ) {
             if( pairDetails.mainReserveValue > mainPairVal ) {
                 mainPair = pair;
                 mainPairVal = pairDetails.mainReserveValue;
@@ -239,7 +239,7 @@ async function getMainPairMultiple( contracts ){
                     mainPairs[token].pairInfos = pairInfos;
                 }
             }
-            else if( EnumMainTokens[pairInfos.chain].STABLECOINS.includes( pairInfos.mainToken ) ) {
+            else if( EnumMainTokens[pairInfos.chain].STABLE_COINS.includes( pairInfos.mainToken ) ) {
                
                 if( pairInfos.mainReserveValue >  mainPairs[token].mainPairVal ) {
                     

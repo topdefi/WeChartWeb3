@@ -12,7 +12,7 @@ const EnumAbi = require("../../../enum/abi");
 const EnumMainTokens = require("../../../enum/mainTokens");
 const EnumBulkTypes = require("../../../enum/bulk.records.type");
 const TokenHistory = require("./entity/TokenHistory");
-const HistoryPirce = require("./entity/HistoryPirce");
+const HistoryPrice = require("./entity/HistoryPrice");
 
 const abiDecoder = require('abi-decoder');
 const Router = require("./entity/Routers");
@@ -51,7 +51,7 @@ class Scraper {
         this.tokens = new Token( this.cache, this.web3, this.bulk  );
         this.tokensFees = new TokenFees( this.web3 );
         this.tokenHistories = new TokenHistory( this.cache );
-        this.historyPrices = new HistoryPirce( this.cache );
+        this.historyPrices = new HistoryPrice( this.cache );
 
         this.allScrapedBlocksTemp = '';
 
@@ -81,24 +81,24 @@ class Scraper {
             if( first_token.contract == mainTokenContract ) return [ first_token, latest_token ]
             else return [ latest_token, first_token ];
         }
-       // compare wich of the tokens is used more frequently to create pairs. This means that the one with more pairs is the more common used
+       // compare which of the tokens is used more frequently to create pairs. This means that the one with more pairs is the more common used
 
         let pairs_comparison; // true if first token is the main one, else false
         // cross chain
         if(
             this.areEqualAdd(EnumMainTokens[process.env.CHAIN_ID].MAIN.address, first_token.contract) &&
-            EnumMainTokens[process.env.CHAIN_ID].STABLECOINS.includes(latest_token.contract)
+            EnumMainTokens[process.env.CHAIN_ID].STABLE_COINS.includes(latest_token.contract)
         ) {
             pairs_comparison = false;
         } else if(
             this.areEqualAdd(EnumMainTokens[process.env.CHAIN_ID].MAIN.address, latest_token.contract) &&
-            EnumMainTokens[process.env.CHAIN_ID].STABLECOINS.includes(first_token.contract)
+            EnumMainTokens[process.env.CHAIN_ID].STABLE_COINS.includes(first_token.contract)
         ){
             pairs_comparison = true;
         }
         else if( first_token.pairs_count == latest_token.pairs_count ){
-            if( EnumMainTokens[process.env.CHAIN_ID].STABLECOINS.includes(first_token.contract) ) pairs_comparison = true;
-            else if( EnumMainTokens[process.env.CHAIN_ID].STABLECOINS.includes(latest_token.contract) ) pairs_comparison = false;
+            if( EnumMainTokens[process.env.CHAIN_ID].STABLE_COINS.includes(first_token.contract) ) pairs_comparison = true;
+            else if( EnumMainTokens[process.env.CHAIN_ID].STABLE_COINS.includes(latest_token.contract) ) pairs_comparison = false;
             else if ( this.areEqualAdd(EnumMainTokens[process.env.CHAIN_ID].MAIN.address, first_token.contract) ) pairs_comparison = true;
             else if ( this.areEqualAdd(EnumMainTokens[process.env.CHAIN_ID].MAIN.address, latest_token.contract) ) pairs_comparison = false;
         } else {
@@ -125,7 +125,7 @@ class Scraper {
                 token1 = cachedPair.tokens[1];
             }
         } catch (error) {
-            console.log( '\t[\tERROR] CANNOT RETRIVE RESERVES', error );
+            console.log( '\t[\tERROR] CANNOT RETRIEVE RESERVES', error );
             return [null, null] ;
         }
         return [token0, token1];
@@ -212,14 +212,14 @@ class Scraper {
 
         if( !this.isWhitelisted(token0) && !this.isWhitelisted(token1) ) return;
 
-        console.log(`[TIME][${blockNumber}][RETRIVED TOKENS]`, token0, token1, (Date.now()-time)/1000 );
+        console.log(`[TIME][${blockNumber}][RETRIEVED TOKENS]`, token0, token1, (Date.now()-time)/1000 );
         time = Date.now();
 
         if(!token0 || !token1 ) return console.log('\t[MISSING TOKENS]', pairAdd, hash);
 
         let tokenHistory = await this.tokenHistories.getTokenHistory( pairAdd );
 
-        console.log(`[TIME][${blockNumber}][RETRIVED TOKENS HISTORIES]`, pairAdd, (Date.now()-time)/1000 );
+        console.log(`[TIME][${blockNumber}][RETRIEVED TOKENS HISTORIES]`, pairAdd, (Date.now()-time)/1000 );
         time = Date.now();
 
         let token0Infos = await this.tokens.getToken( UtilsAddresses.toCheckSum(token0) );
@@ -249,11 +249,11 @@ class Scraper {
 
         let oldRouterInfos = tokenHistory ? await this.routers.getRouter( tokenHistory.router, pairAdd ) : {};
         let detectedRouterInfos = router ? await this.routers.getRouter( router, pairAdd ) : {};
-        console.log(`[TIME][${blockNumber}][RETRIVED ROUTERS]`, (Date.now()-time)/1000 );
+        console.log(`[TIME][${blockNumber}][RETRIEVED ROUTERS]`, (Date.now()-time)/1000 );
         time = Date.now();
 
         let [ mainToken, dependantToken ] = await this.tokenHierarchy(token0Infos, token1Infos, tokenHistory); // get who is the main token in the pair
-        console.log(`[TIME][${blockNumber}][RETRIVED HIERARCHY]`, (Date.now()-time)/1000 );
+        console.log(`[TIME][${blockNumber}][RETRIEVED HIERARCHY]`, (Date.now()-time)/1000 );
         time = Date.now();
         // cross chain
 
@@ -364,7 +364,7 @@ class Scraper {
     
             let time_unix = time/1000;
             console.log('[SETTING TRANSACTION] ', pairAdd, time_unix);
-            this.bulk.bulk_time.setNewDocument( pairAdd, EnumBulkTypes.HISOTRY_TRANSACTION, time_unix, {
+            this.bulk.bulk_time.setNewDocument( pairAdd, EnumBulkTypes.HISTORY_TRANSACTION, time_unix, {
                 time: time_unix, // unix timestamp
                 hash: hash,
                 from: swapInfo.sender,
@@ -422,16 +422,16 @@ class Scraper {
         console.log('[BULK UPDATED]', (Date.now()-start)/1000 );
     }
 
-    getTime() { return (Date.now()/ (1000)) - (Date.now()/ (1000)) % 60 } // get current minete as unix timestamp
+    getTime() { return (Date.now()/ (1000)) - (Date.now()/ (1000)) % 60 } // get current minute as unix timestamp
     
-    async updatePrice( router, pair, tokenAddress, mainTokenAddress, latestHistoryPirce, newPrice, reserve0, reserve1 ) {
+    async updatePrice( router, pair, tokenAddress, mainTokenAddress, latestHistoryPrice, newPrice, reserve0, reserve1 ) {
     
         let time = this.getTime();
         let tokenInfo = this.cache.getToken(UtilsAddresses.toCheckSum(tokenAddress));
         if( !newPrice ) return;
         
 
-        let latestHistory = latestHistoryPirce;
+        let latestHistory = latestHistoryPrice;
         let latestHistoryTime = latestHistory ? latestHistory.time: 0;
 
         let latestHigh = latestHistory ? latestHistory.high : 0;
@@ -456,9 +456,9 @@ class Scraper {
         } else { // create new record  
             
             if( !latestHistoryTime || typeof latestHistoryTime != 'number' ){  // load the time of the last time that this price was updated so that we can change the 'close' parameter
-                console.log(`[CLOSE RETRIVE] RETRIVING LAST HISTORY ${pair}. ${latestHistoryTime}`);
+                console.log(`[CLOSE RETRIEVE] RETRIEVING LAST HISTORY ${pair}. ${latestHistoryTime}`);
                 latestHistoryTime = await this.historyPrices.getLastHistoryTime(pair, time);
-                console.log(`[CLOSE RETRIVE] RETRIVED ${latestHistoryTime} ${pair}`)
+                console.log(`[CLOSE RETRIEVE] RETRIEVED ${latestHistoryTime} ${pair}`)
             }
             if( latestHistoryTime ){ // update the close parameter
                 console.log(`[CLOSE] UPDATING ${latestHistoryTime} WITH ${newPrice}. ${pair}`)
@@ -500,9 +500,25 @@ class Scraper {
             try {
                 let mainTokenPairAddress = await FACTORY.methods.getPair( EnumMainTokens[process.env.CHAIN_ID].MAIN.address, EnumMainTokens[process.env.CHAIN_ID].USDT.address ).call();
                 let mainTokenPair = await new this.web3.eth.Contract( EnumAbi[process.env.CHAIN_ID].PAIR.ARCSWAP, mainTokenPairAddress );
-                let reserves = await mainTokenPair.methods.getReserves().call();
-                let WBNB_RESERVE = reserves[1]/10**EnumMainTokens[process.env.CHAIN_ID].MAIN.decimals;
-                let USDT_RESERVE = reserves[0]/10**EnumMainTokens[process.env.CHAIN_ID].USDT.decimals;
+                let [token0, token1, reserves] = await Promise.all([
+                    mainTokenPair.methods.token0().call(),
+                    mainTokenPair.methods.token1().call(),
+                    mainTokenPair.methods.getReserves().call()
+                ]);
+                let WBNB_RESERVE;
+                let mainDecimals = EnumMainTokens[process.env.CHAIN_ID].MAIN.decimals;
+                if (token0.toLowerCase() === EnumMainTokens[process.env.CHAIN_ID].MAIN.address.toLowerCase()) {
+                    WBNB_RESERVE = reserves[0]/10**mainDecimals;
+                } else {
+                    WBNB_RESERVE = reserves[1]/10**mainDecimals;
+                }
+                let USDT_RESERVE;
+                let usdtDecimals = EnumMainTokens[process.env.CHAIN_ID].USDT.decimals;
+                if (token1.toLowerCase() === EnumMainTokens[process.env.CHAIN_ID].USDT.address.toLowerCase()) {
+                    USDT_RESERVE = reserves[1]/10**usdtDecimals;
+                } else {
+                    USDT_RESERVE = reserves[0]/10**usdtDecimals;
+                }
                 let WBNB_PRICE = USDT_RESERVE/WBNB_RESERVE;
                 this.CHAIN_MAIN_TOKEN_PRICE = WBNB_PRICE;
                 console.log('MAIN_PRICE: ', WBNB_PRICE);
