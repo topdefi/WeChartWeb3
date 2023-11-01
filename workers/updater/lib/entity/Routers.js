@@ -66,7 +66,7 @@ class Router {
     }
 
     async getFeePancakeSimilar(routerAdd){
-        let routerContract = await new this.web3.eth.Contract( EnumAbi[EnumChainId.ARC].ROUTERS.ARCSWAP, routerAdd );
+        let routerContract = await new this.web3.eth.Contract( EnumAbi[EnumChainId.XZO].ROUTERS.EXZOSWAP, routerAdd );
         let factory = await routerContract.methods.factory().call();
         let fee = await routerContract.methods.getAmountOut(10000000, 100000000000, 100000000000).call();
         return parseInt(fee);
@@ -74,9 +74,9 @@ class Router {
     async getFeeBiswapSimilar(routerAdd, pairAdd){
         //console.log('\t\t[BISWAP SIMILAR]', routerAdd, pairAdd)
         if( !pairAdd ) return -1;
-        let routerContractBiswap = await new this.web3.eth.Contract( EnumAbi[EnumChainId.ARC].ROUTERS.BISWAP, routerAdd );
+        let routerContractBiswap = await new this.web3.eth.Contract( EnumAbi[EnumChainId.XZO].ROUTERS.BISWAP, routerAdd );
         let factory = await routerContractBiswap.methods.factory().call();
-        let pairContract = await new this.web3.eth.Contract( EnumAbi[EnumChainId.ARC].PAIR.BISWAP, pairAdd );
+        let pairContract = await new this.web3.eth.Contract( EnumAbi[EnumChainId.XZO].PAIR.BISWAP, pairAdd );
         let pairFee = parseInt(await pairContract.methods.swapFee().call());
         let fee = await routerContractBiswap.methods.getAmountOut(10000000, 100000000000, 100000000000, pairFee).call();
         return parseInt(fee);

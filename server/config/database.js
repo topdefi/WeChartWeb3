@@ -1,3 +1,3 @@
 module.exports = {
-  url: 'mongodb://localhost:27017/charting_1243', // TODO: update me
+  url: 'mongodb://localhost:27017/charting_1229', // TODO: update me
 };

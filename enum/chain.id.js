@@ -1,8 +1,8 @@
 const EnumChainId = {
     BSC: 56,
     BSC_TESTNET: 97,
-    ARC: 1243,
-    ARC_TESTNET: 1244,
+    XZO: 1229,
+    XZO_TESTNET: 2370,
     ETH: 1,
     POLYGON: 137,
     RINKEBY: 4

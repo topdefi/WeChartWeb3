@@ -20,7 +20,7 @@ const Router = require("./entity/Routers");
 const UtilsAddresses = require("../../../utils/addresses");
 const TokenFees = require("./entity/TokenFees");
 abiDecoder.addABI(EnumAbi[process.env.CHAIN_ID].TOKEN);
-abiDecoder.addABI(EnumAbi[process.env.CHAIN_ID].ROUTERS.ARCSWAP);
+abiDecoder.addABI(EnumAbi[process.env.CHAIN_ID].ROUTERS.EXZOSWAP);
 
 const scraperConfig = require("../../../config.js");
 const sleep = require('../../../utils/sleep');
@@ -114,7 +114,7 @@ class Scraper {
         let token0 = 0;
         let token1 = 0;
         try {
-            let pairWeb3Contract =  await new this.web3.eth.Contract( EnumAbi[process.env.CHAIN_ID].PAIR.ARCSWAP, pairAddress );
+            let pairWeb3Contract =  await new this.web3.eth.Contract( EnumAbi[process.env.CHAIN_ID].PAIR.EXZOSWAP, pairAddress );
             if( !cachedPair ){ 
                 console.log('\t\t[PAIR] Not cached')
                 token0 = await pairWeb3Contract.methods.token0().call();
@@ -499,7 +499,7 @@ class Scraper {
         while( true ){
             try {
                 let mainTokenPairAddress = await FACTORY.methods.getPair( EnumMainTokens[process.env.CHAIN_ID].MAIN.address, EnumMainTokens[process.env.CHAIN_ID].USDT.address ).call();
-                let mainTokenPair = await new this.web3.eth.Contract( EnumAbi[process.env.CHAIN_ID].PAIR.ARCSWAP, mainTokenPairAddress );
+                let mainTokenPair = await new this.web3.eth.Contract( EnumAbi[process.env.CHAIN_ID].PAIR.EXZOSWAP, mainTokenPairAddress );
                 let [token0, token1, reserves] = await Promise.all([
                     mainTokenPair.methods.token0().call(),
                     mainTokenPair.methods.token1().call(),

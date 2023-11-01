@@ -1,7 +1,7 @@
 const EnumChainId = require("./enum/chain.id");
 const { toCheckSum } = require("./utils/addresses");
 let scraperConfig = {
-    [EnumChainId.ARC]: {
+    [EnumChainId.XZO]: {
         "save_price": true, // do you want the scraper to save the price records of the tokens ?
         "save_transactions": true, // do you want the scraper to save every swap transaction ?
         "calculate_pair_fees": true, // do you want the scraper to save the fees of all the pairs ?

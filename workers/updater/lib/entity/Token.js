@@ -24,7 +24,7 @@ class Token {
             tokenInfo = await TokenBasic.findOne({ contract: token }).lean().exec();
             //console.log(`\t\t[LOADED TOKEN] ${token} [${(Date.now() - s)/1000}]`);
             if(!tokenInfo) {
-                let token_contract = await new this.web3.eth.Contract( EnumAbi[EnumChainId.ARC].TOKEN, token );
+                let token_contract = await new this.web3.eth.Contract( EnumAbi[EnumChainId.XZO].TOKEN, token );
                 let token_decimals;
                 let name;
                 let supply;
@@ -56,7 +56,7 @@ class Token {
     }
     async getBurned( token ){
         try {
-            let tokenContract = await new this.web3.eth.Contract( EnumAbi[EnumChainId.ARC].PAIR.ARCSWAP, token );
+            let tokenContract = await new this.web3.eth.Contract( EnumAbi[EnumChainId.XZO].PAIR.EXZOSWAP, token );
             let zeroAddAmount = await tokenContract.methods.balanceOf("0x0000000000000000000000000000000000000000").call();
             let burnAddAmount = await tokenContract.methods.balanceOf("0x000000000000000000000000000000000000dEaD").call();
             return zeroAddAmount + burnAddAmount;
